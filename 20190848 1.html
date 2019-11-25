@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+		<style>
+				#snowflakeContainer {
+				  position: absolute;
+				  left: 0px;
+				  top: 0px;
+				  display: none;
+				}
+		  
+				.snowflake {
+				  position: fixed;
+				  /*background-color: #ccc;*/
+				  background-color: #ccc;
+				  user-select: none;
+				  z-index: 1000;
+				  pointer-events: none;
+				  border-radius: 50%;
+				  width: 15px;
+				  height: 15px;
+				}
+			  </style>
+			  <script>
+				var snowflakes = [];
+				var browserWidth;
+				var browserHeight;
+				var numberOfSnowflakes = 100;
+		  
+				window.addEventListener("DOMContentLoaded", generateSnowflakes, false);
+		  
+				// Make snowflakes
+				function Snowflake(element, speed, xPos, yPos) {
+				  // set initial snowflake properties
+				  this.element = element;
+				  this.speed = speed;
+				  this.xPos = xPos;
+				  this.yPos = yPos;
+				  this.scale = 1;
+		  
+				  // declare variables used for snowflake's motion
+				  this.counter = 0;
+				  this.sign = Math.random() < 0.5 ? 1 : -1;
+		  
+				  // setting an initial opacity and size for our snowflake
+				  this.element.style.opacity = (0.1 + Math.random()) / 3;
+				}
+		  
+				// The function responsible for actually moving our snowflake
+				Snowflake.prototype.move = function() {
+				  this.counter += this.speed / 5000;
+				  this.xPos += (this.sign * this.speed * Math.cos(this.counter)) / 80;
+				  this.yPos += Math.sin(this.counter) / 40 + this.speed / 10;
+				  this.scale = 0.5 + Math.abs((10 * Math.cos(this.counter)) / 70);
+		  
+				  // setting our snowflake's position
+				  setTransform(
+					Math.round(this.xPos),
+					Math.round(this.yPos),
+					this.scale,
+					this.element
+				  );
+		  
+				  // if snowflake goes below the browser window, move it back to the top
+				  if (this.yPos > browserHeight) {
+					this.yPos = -50;
+				  }
+				};
+		  
+				// A performant way to set your snowflake's position and size
+				function setTransform(xPos, yPos, scale, el) {
+				  el.style.transform = `translate(${xPos}px, ${yPos}px) scale(${scale}, ${scale})`;
+				}
+		  
+				// The function responsible for creating the snowflake
+				function generateSnowflakes() {
+				  var originalSnowflake = document.querySelector(".snowflake");
+		  
+				  // access our snowflake element's parent container
+				  var snowflakeContainer = originalSnowflake.parentNode;
+				  snowflakeContainer.style.display = "block";
+		  
+				  // get our browser's size
+				  browserWidth = document.documentElement.clientWidth;
+				  browserHeight = document.documentElement.clientHeight;
+		  
+				  // create each individual snowflake
+				  for (var i = 0; i < numberOfSnowflakes; i++) {
+					var snowflakeClone = originalSnowflake.cloneNode(true);
+					snowflakeContainer.appendChild(snowflakeClone);
+		  
+					// set our snowflake's initial position and related properties
+					var initialXPos = getPosition(50, browserWidth);
+					var initialYPos = getPosition(50, browserHeight);
+					var speed = 5 + Math.random() * 40;
+		  
+					// create our Snowflake object
+					var snowflakeObject = new Snowflake(
+					  snowflakeClone,
+					  speed,
+					  initialXPos,
+					  initialYPos
+					);
+					snowflakes.push(snowflakeObject);
+				  }
+		  
+				  // remove the original snowflake because we no longer need it visible
+				  snowflakeContainer.removeChild(originalSnowflake);
+		  
+				  moveSnowflakes();
+				}
+		  
+				function moveSnowflakes() {
+				  for (var i = 0; i < snowflakes.length; i++) {
+					var snowflake = snowflakes[i];
+					snowflake.move();
+				  }
+		  
+				  requestAnimationFrame(moveSnowflakes);
+				}
+		  
+				// This function returns a number between (maximum - offset) and (maximum + offset)
+				function getPosition(offset, size) {
+				  return Math.round(-1 * offset + Math.random() * (size + 2 * offset));
+				}
+			  </script>
+
+	<title> 하리보 </title>
+	<meta charset="UTF-8">
+	<meta name="description" content="하리보 포트폴리오">
+	<meta name="keywords" content="디자인, 기획">
+	<link rel="stylesheet" href="C:/Users/USER/Desktop/W11/style.css">
+</head>
+<body style="background-color:black;">
+        <div id="snowflakeContainer">
+          <span class="snowflake"></span>
+        </div>
+	<!-- Main section start -->
+	<div class="main-site-warp">
+		<div class="site-menu-warp">
+			            
+            <!-- Main menu -->
+			<nav class="site-menu">
+				<a href="" class="active">Home</a>
+				<a href="">About Me</a>
+				<a href="">Blog</a>
+				<a href="">Portfolio</a>
+				<a href="">Contact</a>
+			
+            </nav>
+        </div>
+    
+			</header>
+            <div class="site-content-warp"></div>
+        
+			<!-- Left Side section -->
+			<div class="main-sidebar">
+				<div class="mb-warp">
+					<a href="index.html" class="site-logo">
+						<h2> 하리보 </h2>
+						<h3>웹서비스 기획자</h3>
+					</a>
+					<div class="about-info">
+						<h2>Welcome to the world of HARIBO </h2>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus libero mauris, bibendum eget sapien ac, ultrices rhoncus ipsum. Donec nec sapien in urna fermentum ornare. Morbi vel ultrices leo. Sed eu turpis eu arcu vehicula fringilla ut vitae orci. Suspendisse maximus malesuada  </p>
+					</div>
+					<ul class="contact-info">
+						<li>+82 010-6614-3552</li>
+						
+					</ul>
+					<a href="https://www.instagram.com/hee__0.0/" class="site-btn">see my instagram <img src="img/arrow-right.png" alt=""></a>
+				</div>
+			</div>
+			<!-- Left Side section end -->
+			<!-- Page start -->
+			<div class="page-section">
+				<div class="hero-section">
+					<div class="hero-scroll">
+						<div class="hero-track">
+							<div class="hs-item set-bg" data-setbg="img/hero/1.jpg">
+								<div class="hs-info">
+									<h5>HARIBO</h5>
+									<p>My Favorite</p>
+									<a href="#"><img src="img/arrow-right.png" alt=""></a>
+                                    <image src="http://thessancom.img12.kr/2015/07/07160527.jpg"></image>
+                                </div>
+							</div>
+							<div class="hs-item set-bg" data-setbg="img/hero/2.jpg">
+								<div class="hs-info">
+									<h5>WALK</h5>
+									<p>My hobby</p>
+									<a href="#"><img src="img/arrow-right.png" alt=""></a>
+                                    <image src="http://blogfiles.naver.net/20111027_17/jimbo2011_131969244342285vUS_JPEG/%BB%EA%C3%A5%B5%A5%C0%CC%C6%AE2.jpg"></image>
+                                </div>
+							</div>
+							<div class="hs-item set-bg" data-setbg="img/hero/1.jpg">
+								<div class="hs-info">
+									<h5>BOOK</h5>
+									<p>Enjoy</p>
+                                    <a href="#"><img src="img/arrow-right.png" alt=""></a>
+                                    <image src="data:image/jpeg;base64,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"></image>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Page end -->
+		</div>
+		<div class="copyright"><p>
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | by HARIBO </a>
+  </p></div>
+	</div>
+
+	</body>
+	
+</html>
